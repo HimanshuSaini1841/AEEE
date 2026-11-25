@@ -83,9 +83,42 @@ if ($action) {
             $output .= "=== DATABASE SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
         }
 
+        if ($action === 'seed_all_pyqs') {
+            foreach ([
+                'Aeee2022PyqMockTestSeeder',
+                'Aeee2018PyqMockTestSeeder',
+                'Aeee2017PyqMockTestSeeder',
+                'Aeee2015PyqMockTestSeeder',
+                'Aeee2009PyqMockTestSeeder',
+            ] as $seeder) {
+                Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => $seeder, '--force' => true]);
+                $output .= "=== SEEDED {$seeder} ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+            }
+        }
+
         if ($action === 'seed_pyq_2022') {
             Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'Aeee2022PyqMockTestSeeder', '--force' => true]);
             $output .= "=== AEEE 2022 PYQ MOCK TEST (100 Qs CBT) SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+        }
+
+        if ($action === 'seed_pyq_2018') {
+            Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'Aeee2018PyqMockTestSeeder', '--force' => true]);
+            $output .= "=== AEEE 2018 PYQ MOCK TEST (100 Qs CBT) SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+        }
+
+        if ($action === 'seed_pyq_2017') {
+            Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'Aeee2017PyqMockTestSeeder', '--force' => true]);
+            $output .= "=== AEEE 2017 PYQ MOCK TEST (105 Qs CBT) SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+        }
+
+        if ($action === 'seed_pyq_2015') {
+            Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'Aeee2015PyqMockTestSeeder', '--force' => true]);
+            $output .= "=== AEEE 2015 PYQ MOCK TEST (100 Qs CBT) SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+        }
+
+        if ($action === 'seed_pyq_2009') {
+            Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'Aeee2009PyqMockTestSeeder', '--force' => true]);
+            $output .= "=== AEEE 2009 PYQ MOCK TEST (120 Qs CBT) SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
         }
 
         if ($action === 'seed_aeee1') {
@@ -159,8 +192,23 @@ if ($action) {
             <button type="submit" name="action" value="seed_database" class="btn btn-seed">
                 🌱 Run DatabaseSeeder (All Seeders)
             </button>
-            <button type="submit" name="action" value="seed_pyq_2022" class="btn" style="background:#059669; color:white;">
-                📝 Seed AEEE 2022 PYQ (Complete 100 Qs CBT)
+            <button type="submit" name="action" value="seed_all_pyqs" class="btn" style="background:#059669; color:white; font-size:13.5px;">
+                🏆 Seed All PYQ CBT Mock Tests (2022, 2018, 2017, 2015, 2009)
+            </button>
+            <button type="submit" name="action" value="seed_pyq_2022" class="btn" style="background:#047857; color:white;">
+                📝 Seed 2022 (100 Qs)
+            </button>
+            <button type="submit" name="action" value="seed_pyq_2018" class="btn" style="background:#047857; color:white;">
+                📝 Seed 2018 (100 Qs)
+            </button>
+            <button type="submit" name="action" value="seed_pyq_2017" class="btn" style="background:#047857; color:white;">
+                📝 Seed 2017 (105 Qs)
+            </button>
+            <button type="submit" name="action" value="seed_pyq_2015" class="btn" style="background:#047857; color:white;">
+                📝 Seed 2015 (100 Qs)
+            </button>
+            <button type="submit" name="action" value="seed_pyq_2009" class="btn" style="background:#047857; color:white;">
+                📝 Seed 2009 (120 Qs)
             </button>
             <button type="submit" name="action" value="seed_aeee1" class="btn" style="background:#7c3aed; color:white;">
                 🎯 Run AeeeMockTest1Seeder Only
