@@ -52,7 +52,21 @@ $app = require_once $appFile;
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
+// Ensure all seeder classes are loaded into memory (critical for cPanel without composer dump-autoload)
+$seederDirs = [
+    __DIR__ . '/../database/seeders',
+    __DIR__ . '/database/seeders',
+];
+foreach ($seederDirs as $dir) {
+    if (is_dir($dir)) {
+        foreach (glob($dir . '/*.php') as $seederFile) {
+            require_once $seederFile;
+        }
+    }
+}
+
 $action = $_REQUEST['action'] ?? null;
+$customSeeder = trim($_REQUEST['custom_seeder'] ?? '');
 $output = '';
 $hasRun = false;
 
@@ -64,9 +78,26 @@ if ($action) {
             $output .= "=== MIGRATION OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
         }
 
-        if ($action === 'seed' || $action === 'all') {
+        if ($action === 'seed_database' || $action === 'all') {
+            Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'DatabaseSeeder', '--force' => true]);
+            $output .= "=== DATABASE SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+        }
+
+        if ($action === 'seed_aeee1') {
+            Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'AeeeMockTest1Seeder', '--force' => true]);
+            $output .= "=== AEEE MOCK TEST 1 SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+        }
+
+        if ($action === 'seed_mock') {
             Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'MockTestSeeder', '--force' => true]);
             $output .= "=== MOCK TEST SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+        }
+
+        if ($action === 'seed_custom' && !empty($customSeeder)) {
+            // Strip any namespace prefix if user types Database\Seeders\X or bare X
+            $seederName = basename(str_replace('\\', '/', $customSeeder));
+            Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => $seederName, '--force' => true]);
+            $output .= "=== CUSTOM SEEDER OUTPUT ({$seederName}) ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
         }
 
         if ($action === 'clear_cache' || $action === 'all') {
@@ -115,17 +146,30 @@ if ($action) {
 
         <form method="POST" action="" class="btn-group">
             <button type="submit" name="action" value="all" class="btn btn-all">
-                ⚡ Run All (Migrate + Seed Mock Tests + Clear Cache)
+                ⚡ Run All (Migrate + DatabaseSeeder + Clear Cache)
             </button>
             <button type="submit" name="action" value="migrate" class="btn btn-migrate">
                 📦 Run Migrations Only
             </button>
-            <button type="submit" name="action" value="seed" class="btn btn-seed">
-                🌱 Seed Mock Tests (PYQs)
+            <button type="submit" name="action" value="seed_database" class="btn btn-seed">
+                🌱 Run DatabaseSeeder (All Seeders)
+            </button>
+            <button type="submit" name="action" value="seed_aeee1" class="btn" style="background:#7c3aed; color:white;">
+                🎯 Run AeeeMockTest1Seeder Only
+            </button>
+            <button type="submit" name="action" value="seed_mock" class="btn" style="background:#0284c7; color:white;">
+                📚 Run MockTestSeeder
             </button>
             <button type="submit" name="action" value="clear_cache" class="btn btn-cache">
                 🧹 Clear Cache
             </button>
+
+            <div style="width: 100%; margin-top: 14px; display: flex; gap: 10px; align-items: center;">
+                <input type="text" name="custom_seeder" placeholder="Enter seeder name, e.g. AeeeMockTest1Seeder" style="flex: 1; padding: 12px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: #f8fafc; font-family: monospace; font-size: 13px;">
+                <button type="submit" name="action" value="seed_custom" class="btn" style="background: #e11d48; color: white;">
+                    ▶ Run Custom Seeder
+                </button>
+            </div>
         </form>
 
         <?php if ($hasRun): ?>
