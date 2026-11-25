@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AeeeMockTest1Seeder::class,
+            Aeee2022PyqMockTestSeeder::class,
             AdminUserSeeder::class,
             DynamicFieldsSeeder::class,
             AppSettingsSeeder::class,

@@ -83,6 +83,11 @@ if ($action) {
             $output .= "=== DATABASE SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
         }
 
+        if ($action === 'seed_pyq_2022') {
+            Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'Aeee2022PyqMockTestSeeder', '--force' => true]);
+            $output .= "=== AEEE 2022 PYQ MOCK TEST (100 Qs CBT) SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
+        }
+
         if ($action === 'seed_aeee1') {
             Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'AeeeMockTest1Seeder', '--force' => true]);
             $output .= "=== AEEE MOCK TEST 1 SEEDER OUTPUT ===\n" . Illuminate\Support\Facades\Artisan::output() . "\n";
@@ -153,6 +158,9 @@ if ($action) {
             </button>
             <button type="submit" name="action" value="seed_database" class="btn btn-seed">
                 🌱 Run DatabaseSeeder (All Seeders)
+            </button>
+            <button type="submit" name="action" value="seed_pyq_2022" class="btn" style="background:#059669; color:white;">
+                📝 Seed AEEE 2022 PYQ (Complete 100 Qs CBT)
             </button>
             <button type="submit" name="action" value="seed_aeee1" class="btn" style="background:#7c3aed; color:white;">
                 🎯 Run AeeeMockTest1Seeder Only
