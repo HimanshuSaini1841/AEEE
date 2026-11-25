@@ -110,7 +110,7 @@
 
                 <!-- Actions: App CTA -->
                 <div class="hidden sm:flex items-center space-x-3">
-                    <a href="{{ route('frontend.home') }}#download-app" class="px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 rounded-xl shadow-md shadow-brand-600/25 hover:shadow-lg hover:shadow-brand-600/35 transition transform hover:-translate-y-0.5">
+                    <a href="https://play.google.com/store/apps/details?id=com.crackaeee.app" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 rounded-xl shadow-md shadow-brand-600/25 hover:shadow-lg hover:shadow-brand-600/35 transition transform hover:-translate-y-0.5">
                         <i class="fa-brands fa-google-play mr-1.5"></i> Get Android App
                     </a>
                 </div>
@@ -148,7 +148,7 @@
                 Terms & Conditions
             </a>
             <div class="pt-4 border-t border-slate-100 flex flex-col space-y-2">
-                <a href="{{ route('frontend.home') }}#download-app" @click="mobileMenuOpen = false" class="w-full text-center py-3 text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/20">
+                <a href="https://play.google.com/store/apps/details?id=com.crackaeee.app" target="_blank" rel="noopener noreferrer" @click="mobileMenuOpen = false" class="w-full text-center py-3 text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/20">
                     <i class="fa-brands fa-google-play mr-2"></i> Download Android App
                 </a>
             </div>
@@ -173,7 +173,7 @@
                         <span class="text-2xl font-black text-white tracking-tight">Crack AEEE</span>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed pr-6">
-                        India's dedicated learning and preparation platform for the Amrita Entrance Examination - Engineering (AEEE). We empower aspirants with authentic year-wise question papers (2005 - 2026), structured syllabus breakdowns, and secure offline study materials.
+                        India's dedicated learning and preparation platform for the Amrita Entrance Examination - Engineering (AEEE). We empower aspirants with authentic year-wise question papers (2005 - 2027), structured syllabus breakdowns, and secure offline study materials.
                     </p>
                 </div>
 
@@ -185,6 +185,7 @@
                         <li><a href="{{ route('frontend.about') }}" class="hover:text-pink-400 transition">About Us</a></li>
                         <li><a href="{{ route('frontend.home') }}#features" class="hover:text-pink-400 transition">What We Provide</a></li>
                         <li><a href="{{ route('frontend.home') }}#pyqs" class="hover:text-pink-400 transition">PYQ Question Papers</a></li>
+                        <li><a href="https://play.google.com/store/apps/details?id=com.crackaeee.app" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 font-semibold transition"><i class="fa-brands fa-google-play mr-1"></i> Google Play App</a></li>
                         <li><a href="{{ route('frontend.contact') }}" class="hover:text-pink-400 transition">Contact Us</a></li>
                     </ul>
                 </div>

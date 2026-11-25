@@ -58,9 +58,9 @@
                         <span>Explore Question Papers</span>
                         <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
-                    <a href="#download-app" class="w-full sm:w-auto px-7 py-3.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200/80 rounded-xl shadow-sm transition text-center flex items-center justify-center space-x-2">
+                    <a href="https://play.google.com/store/apps/details?id=com.crackaeee.app" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-7 py-3.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200/80 rounded-xl shadow-sm transition text-center flex items-center justify-center space-x-2">
                         <i class="fa-brands fa-google-play text-brand-600 text-base"></i>
-                        <span>Get Android App</span>
+                        <span>Get on Google Play</span>
                     </a>
                 </div>
 
@@ -457,18 +457,18 @@
                 ANDROID MOBILE APP
             </span>
             <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-                Start Your AEEE 2026 Preparation on Mobile
+                Start Your AEEE 2027 Preparation on Mobile
             </h2>
             <p class="text-base sm:text-lg text-pink-100 font-medium">
                 Install Crack AEEE on your Android device to unlock official question papers, DRM-protected offline reading, and real-time slot booking announcements.
             </p>
 
             <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="mailto:hostcob.doon@gmail.com?subject=AEEE%20App%20Early%20Access%20Request" class="px-8 py-4 bg-white text-brand-700 hover:bg-slate-100 font-bold rounded-xl shadow-xl transition transform hover:-translate-y-0.5 flex items-center space-x-3">
-                    <i class="fa-brands fa-google-play text-xl text-brand-600"></i>
+                <a href="https://play.google.com/store/apps/details?id=com.crackaeee.app" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-white text-brand-700 hover:bg-slate-100 font-bold rounded-xl shadow-xl transition transform hover:-translate-y-0.5 flex items-center space-x-3">
+                    <i class="fa-brands fa-google-play text-2xl text-brand-600"></i>
                     <div class="text-left">
-                        <span class="block text-[10px] text-slate-500 uppercase font-semibold">Download For</span>
-                        <span class="block text-sm font-extrabold text-slate-900">Android Smartphone</span>
+                        <span class="block text-[10px] text-slate-500 uppercase font-semibold">GET IT ON</span>
+                        <span class="block text-sm font-extrabold text-slate-900">Google Play Store</span>
                     </div>
                 </a>
 

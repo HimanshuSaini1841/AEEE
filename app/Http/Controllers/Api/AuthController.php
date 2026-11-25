@@ -470,7 +470,7 @@ class AuthController extends Controller
         $forceUpdate = filter_var(AppSetting::get('force_update', '0'), FILTER_VALIDATE_BOOLEAN);
         $updateTitle = AppSetting::get('update_title', 'New Update Available!');
         $updateMessage = AppSetting::get('update_message', 'A newer and faster version of CrackAEEE is available on Google Play with new mock tests, latest PYQs, and performance enhancements.');
-        $playStoreUrl = AppSetting::get('play_store_url', 'market://details?id=com.crackaeee.app');
+        $playStoreUrl = AppSetting::get('play_store_url', 'https://play.google.com/store/apps/details?id=com.crackaeee.app');
 
         return response()->json([
             'success' => true,
