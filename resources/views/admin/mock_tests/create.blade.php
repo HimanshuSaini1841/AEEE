@@ -170,6 +170,22 @@
                 <textarea name="instructions" rows="4" class="w-full text-xs px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-[#9d174d] font-mono leading-relaxed">{{ old('instructions', "1. Total duration of this examination is 150 minutes.\n2. Each correct response fetches +3 marks. Each wrong response deducts -1 mark.\n3. Unattempted questions carry zero marks.\n4. You can switch between sections (Mathematics, Physics, Chemistry, English) anytime.\n5. Test automatically auto-submits when the timer reaches 00:00:00.") }}</textarea>
             </div>
 
+            <!-- PYQ Mock Test Configuration -->
+            <div class="p-4 rounded-xl bg-amber-50/50 border border-amber-200/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" name="is_pyq" value="1" {{ old('is_pyq') ? 'checked' : '' }} class="w-5 h-5 rounded text-amber-600 focus:ring-amber-500 border-amber-300">
+                    <div>
+                        <span class="text-xs font-bold text-slate-800">Categorize as PYQ CBT Mock Test</span>
+                        <p class="text-[11px] text-slate-500">Enable this if this test represents an official previous year question paper.</p>
+                    </div>
+                </label>
+
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-bold text-slate-700">PYQ Year:</label>
+                    <input type="number" name="pyq_year" min="2000" max="2035" placeholder="e.g. 2024" value="{{ old('pyq_year') }}" class="w-28 text-xs px-3 py-1.5 rounded-lg border border-slate-200 text-center font-bold">
+                </div>
+            </div>
+
             <!-- Active Status & Order -->
             <div class="flex items-center justify-between pt-4 border-t border-slate-100">
                 <label class="flex items-center gap-3 cursor-pointer">

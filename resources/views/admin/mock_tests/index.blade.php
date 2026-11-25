@@ -35,7 +35,14 @@
                     @forelse($mockTests as $test)
                         <tr class="hover:bg-slate-50/60 transition-colors">
                             <td class="py-4 px-4">
-                                <div class="font-bold text-slate-800 text-sm">{{ $test->title }}</div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-slate-800 text-sm">{{ $test->title }}</span>
+                                    @if($test->is_pyq)
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
+                                            💻 PYQ {{ $test->pyq_year ?? '' }}
+                                        </span>
+                                    @endif
+                                </div>
                                 @if($test->description)
                                     <div class="text-[11px] text-slate-500 mt-0.5 line-clamp-1 max-w-sm">{{ $test->description }}</div>
                                 @endif

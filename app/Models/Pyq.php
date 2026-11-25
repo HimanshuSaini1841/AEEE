@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 
 class Pyq extends Model
@@ -43,6 +44,14 @@ class Pyq extends Model
     public function getDownloadUrlAttribute(): string
     {
         return url('/api/v1/pyqs/' . $this->id . '/download');
+    }
+
+    /**
+     * Associated CBT Mock Test (if this PYQ has been mapped to a live CBT test).
+     */
+    public function mockTest(): HasOne
+    {
+        return $this->hasOne(MockTest::class);
     }
 
     /**

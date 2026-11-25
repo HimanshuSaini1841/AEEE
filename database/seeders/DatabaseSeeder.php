@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            AeeeMockTest1Seeder::class,
             AdminUserSeeder::class,
             DynamicFieldsSeeder::class,
             AppSettingsSeeder::class,

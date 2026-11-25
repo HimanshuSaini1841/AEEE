@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\MockTest;
 use App\Models\MockTestQuestion;
+use App\Models\Pyq;
 use Illuminate\Database\Seeder;
 
 class MockTestSeeder extends Seeder
@@ -15,6 +16,7 @@ class MockTestSeeder extends Seeder
     {
         $this->seedMockTest1();
         $this->seedMockTest2();
+        $this->seedPyqMockTest2024();
     }
 
     /**
@@ -34,6 +36,7 @@ class MockTestSeeder extends Seeder
                 'negative_marks_default' => 1.00,
                 'instructions' => "1. Total duration of the examination is 150 minutes.\n2. +3.00 marks are awarded for each correct response.\n3. -1.00 mark is deducted for each incorrect response (Negative Marking).\n4. Zero marks are deducted for unattempted questions.\n5. You can freely switch between Mathematics, Physics, Chemistry, and English sections using the Section Filter pills.",
                 'is_active' => true,
+                'is_pyq' => false,
                 'order_num' => 1,
             ]
         );
@@ -368,6 +371,7 @@ class MockTestSeeder extends Seeder
                 'negative_marks_default' => 1.00,
                 'instructions' => "1. Exam contains 20 authentic high-yield questions matching AEEE standard.\n2. +3.00 marks for each correct response, -1.00 mark for each wrong response.\n3. Zero marks for unattempted questions.\n4. You can jump between sections or review full answers post-submission.\n5. Mathematical equations are rendered in crisp vector fonts.",
                 'is_active' => true,
+                'is_pyq' => false,
                 'order_num' => 2,
             ]
         );
@@ -683,5 +687,349 @@ class MockTestSeeder extends Seeder
         $test2->total_marks = (int) array_sum(array_column($questionsTest2, 'positive_marks'));
         $test2->save();
         $test2->clearCache();
+    }
+
+    /**
+     * PYQ CBT Test - AEEE 2024 Official Paper
+     */
+    private function seedPyqMockTest2024(): void
+    {
+        $pyq2024 = Pyq::firstOrCreate(
+            ['year' => 2024, 'subject' => 'Full Length'],
+            [
+                'title' => 'AEEE 2024 Official Question Paper (Phase 1)',
+                'file_name' => 'AEEE_2024_Official_Paper.pdf',
+                'file_size_formatted' => '2.4 MB',
+                'file_size_bytes' => 2516582,
+                'total_pages' => 32,
+                'file_path' => 'pyqs/aeee_2024_official.pdf',
+                'is_active' => true,
+            ]
+        );
+
+        $pyqTest = MockTest::updateOrCreate(
+            ['slug' => 'aeee-2024-official-paper-cbt'],
+            [
+                'title' => 'AEEE 2024 Official Paper - CBT Exam',
+                'description' => 'Official AEEE 2024 question paper delivered in full CBT exam mode. Complete with authentic questions, official marking (+3, -1), timer countdown, and comprehensive solution analysis.',
+                'duration_minutes' => 150,
+                'total_marks' => 300,
+                'total_questions' => 20,
+                'positive_marks_default' => 3.00,
+                'negative_marks_default' => 1.00,
+                'instructions' => "1. Authentic AEEE 2024 Official Question Paper.\n2. Total exam duration: 150 minutes.\n3. Marking Scheme: +3.00 marks for correct answer, -1.00 negative mark for incorrect answer.\n4. Section breakdown: Mathematics, Physics, Chemistry, English.\n5. Detailed solutions and performance analytics available immediately after submission.",
+                'is_active' => true,
+                'is_pyq' => true,
+                'pyq_year' => 2024,
+                'pyq_id' => $pyq2024?->id,
+                'order_num' => 1,
+            ]
+        );
+
+        $questionsPyq = [
+            // ==================== MATHEMATICS ====================
+            [
+                'subject' => 'Mathematics',
+                'topic' => 'Matrices & Determinants',
+                'order_num' => 1,
+                'question_text' => 'Let $A$ be a $3 \\times 3$ invertible matrix such that $|A| = 4$. What is the value of $|\\text{adj}(2A)|$?',
+                'option_a' => '$256$',
+                'option_b' => '$1024$',
+                'option_c' => '$4096$',
+                'option_d' => '$64$',
+                'correct_option' => 'B',
+                'explanation' => 'For an $n \\times n$ matrix $M$, $|\\text{adj}(M)| = |M|^{n-1}$. Here $n = 3$, so $|\\text{adj}(2A)| = |2A|^{3-1} = |2A|^2$. Since $|kA| = k^n |A|$, we have $|2A| = 2^3 |A| = 8 \\times 4 = 32$. Therefore, $|\\text{adj}(2A)| = (32)^2 = 1024$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Mathematics',
+                'topic' => 'Definite Integration',
+                'order_num' => 2,
+                'question_text' => 'The value of the definite integral $I = \\int_{0}^{\\frac{\\pi}{2}} \\frac{\\sin^3 x}{\\sin^3 x + \\cos^3 x} dx$ is:',
+                'option_a' => '$\\frac{\\pi}{2}$',
+                'option_b' => '$\\frac{\\pi}{4}$',
+                'option_c' => '$\\pi$',
+                'option_d' => '$1$',
+                'correct_option' => 'B',
+                'explanation' => 'Using property $\\int_0^a f(x)dx = \\int_0^a f(a-x)dx$: replacing $x$ by $\\frac{\\pi}{2} - x$ gives $I = \\int_{0}^{\\frac{\\pi}{2}} \\frac{\\cos^3 x}{\\cos^3 x + \\sin^3 x} dx$. Adding the two equations: $2I = \\int_0^{\\frac{\\pi}{2}} 1 dx = \\frac{\\pi}{2} \\implies I = \\frac{\\pi}{4}$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Mathematics',
+                'topic' => 'Straight Lines',
+                'order_num' => 3,
+                'question_text' => 'The perpendicular distance between the parallel lines $3x + 4y - 9 = 0$ and $6x + 8y + 12 = 0$ is:',
+                'option_a' => '$3$ units',
+                'option_b' => '$2$ units',
+                'option_c' => '$4.5$ units',
+                'option_d' => '$1.5$ units',
+                'correct_option' => 'A',
+                'explanation' => 'Rewrite second line by dividing by $2$: $3x + 4y + 6 = 0$. The distance between $ax+by+c_1=0$ and $ax+by+c_2=0$ is $d = \\frac{|c_1 - c_2|}{\\sqrt{a^2 + b^2}} = \\frac{|-9 - 6|}{\\sqrt{3^2 + 4^2}} = \\frac{15}{5} = 3$ units.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Mathematics',
+                'topic' => 'Complex Numbers',
+                'order_num' => 4,
+                'question_text' => 'If $\\omega$ is a non-real cube root of unity, then the value of $(1 + \\omega - \\omega^2)^7$ is:',
+                'option_a' => '$128\\omega$',
+                'option_b' => '$-128\\omega^2$',
+                'option_c' => '$128\\omega^2$',
+                'option_d' => '$-128\\omega$',
+                'correct_option' => 'B',
+                'explanation' => 'Since $1 + \\omega + \\omega^2 = 0$, $1 + \\omega = -\\omega^2$. Then $(1 + \\omega - \\omega^2)^7 = (-2\\omega^2)^7 = -128 \\omega^{14}$. Since $\\omega^{14} = (\\omega^3)^4 \\cdot \\omega^2 = \\omega^2$, the result is $-128\\omega^2$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Mathematics',
+                'topic' => 'Limits & Continuity',
+                'order_num' => 5,
+                'question_text' => 'Evaluate: $\\lim_{x \\to 0} \\frac{e^{x^2} - \\cos x}{x^2}$',
+                'option_a' => '$1$',
+                'option_b' => '$\\frac{3}{2}$',
+                'option_c' => '$\\frac{1}{2}$',
+                'option_d' => '$2$',
+                'correct_option' => 'B',
+                'explanation' => 'Using series expansion: $e^{x^2} = 1 + x^2 + \\frac{x^4}{2} + \\dots$ and $\\cos x = 1 - \\frac{x^2}{2} + \\dots$. Therefore, $e^{x^2} - \\cos x = x^2 - \\left(-\\frac{x^2}{2}\\right) + O(x^4) = \\frac{3}{2}x^2 + O(x^4)$. Dividing by $x^2$ gives $\\frac{3}{2}$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+
+            // ==================== PHYSICS ====================
+            [
+                'subject' => 'Physics',
+                'topic' => 'Kinematics & Projectile Motion',
+                'order_num' => 6,
+                'question_text' => 'A projectile is launched from ground level with initial speed $u$ at an angle of $45^\\circ$ to the horizontal. The radius of curvature of its trajectory at the highest point is:',
+                'option_a' => '$\\frac{u^2}{2g}$',
+                'option_b' => '$\\frac{u^2}{g}$',
+                'option_c' => '$\\frac{u^2}{4g}$',
+                'option_d' => '$\\frac{2u^2}{g}$',
+                'correct_option' => 'A',
+                'explanation' => 'At the highest point, speed $v = u \\cos(45^\\circ) = \\frac{u}{\\sqrt{2}}$, and normal acceleration is $a_n = g$. Radius of curvature $R = \\frac{v^2}{a_n} = \\frac{(u/\\sqrt{2})^2}{g} = \\frac{u^2}{2g}$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Physics',
+                'topic' => 'Electrostatics',
+                'order_num' => 7,
+                'question_text' => 'Two point charges $+4q$ and $+q$ are fixed at separation $L$. At what distance from the $+4q$ charge is the electric field zero?',
+                'option_a' => '$\\frac{L}{3}$',
+                'option_b' => '$\\frac{2L}{3}$',
+                'option_c' => '$\\frac{3L}{4}$',
+                'option_d' => '$\\frac{L}{2}$',
+                'correct_option' => 'B',
+                'explanation' => 'Let distance from $+4q$ be $x$. At the neutral point: $\\frac{k(4q)}{x^2} = \\frac{k(q)}{(L-x)^2} \\implies \\frac{2}{x} = \\frac{1}{L-x} \\implies 2L - 2x = x \\implies 3x = 2L \\implies x = \\frac{2L}{3}$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Physics',
+                'topic' => 'Dual Nature & Modern Physics',
+                'order_num' => 8,
+                'question_text' => 'When incident light of wavelength $\\lambda$ hits a photosensitive surface, stopping potential is $3V_0$. When light of $2\\lambda$ is used, stopping potential becomes $V_0$. The threshold wavelength of the metal is:',
+                'option_a' => '$3\\lambda$',
+                'option_b' => '$4\\lambda$',
+                'option_c' => '$\\frac{5\\lambda}{2}$',
+                'option_d' => '$5\\lambda$',
+                'correct_option' => 'B',
+                'explanation' => 'Einstein\'s photoelectric equation: $e(3V_0) = \\frac{hc}{\\lambda} - W_0$ and $e(V_0) = \\frac{hc}{2\\lambda} - W_0$. Multiply second equation by $3$: $3eV_0 = \\frac{3hc}{2\\lambda} - 3W_0$. Equating: $\\frac{hc}{\\lambda} - W_0 = \\frac{3hc}{2\\lambda} - 3W_0 \\implies 2W_0 = \\frac{hc}{2\\lambda} \\implies W_0 = \\frac{hc}{4\\lambda}$. Therefore, $\\lambda_0 = 4\\lambda$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Physics',
+                'topic' => 'Current Electricity',
+                'order_num' => 9,
+                'question_text' => 'A uniform wire of resistance $20\\,\\Omega$ is bent into a complete circle. The effective resistance between two diametrically opposite points on the circle is:',
+                'option_a' => '$10\\,\\Omega$',
+                'option_b' => '$5\\,\\Omega$',
+                'option_c' => '$2.5\\,\\Omega$',
+                'option_d' => '$20\\,\\Omega$',
+                'correct_option' => 'B',
+                'explanation' => 'Two semicircular halves each have resistance $R_1 = R_2 = \\frac{20}{2} = 10\\,\\Omega$. Connected across opposite ends, they form a parallel combination: $R_{eq} = \\frac{10 \\times 10}{10 + 10} = 5\\,\\Omega$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Physics',
+                'topic' => 'Thermodynamics',
+                'order_num' => 10,
+                'question_text' => 'One mole of an ideal monoatomic gas expands isothermally at temperature $T$ to double its initial volume. The work done during this process is:',
+                'option_a' => '$RT \\ln 2$',
+                'option_b' => '$\\frac{3}{2} RT \\ln 2$',
+                'option_c' => '$2 RT$',
+                'option_d' => 'Zero',
+                'correct_option' => 'A',
+                'explanation' => 'Work done in reversible isothermal expansion is $W = nRT \\ln\\left(\\frac{V_2}{V_1}\\right)$. With $n = 1$ and $V_2 = 2V_1$, $W = RT \\ln 2$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+
+            // ==================== CHEMISTRY ====================
+            [
+                'subject' => 'Chemistry',
+                'topic' => 'Chemical Kinetics',
+                'order_num' => 11,
+                'question_text' => 'For a first-order chemical reaction, the time required for $75\\%$ completion is $60$ minutes. What is the half-life ($t_{1/2}$) of this reaction?',
+                'option_a' => '$45$ minutes',
+                'option_b' => '$30$ minutes',
+                'option_c' => '$20$ minutes',
+                'option_d' => '$15$ minutes',
+                'correct_option' => 'B',
+                'explanation' => 'For a first-order reaction, $t_{75\\%} = 2 \\times t_{1/2}$. Hence $t_{1/2} = \\frac{60}{2} = 30$ minutes.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Chemistry',
+                'topic' => 'Coordination Compounds',
+                'order_num' => 12,
+                'question_text' => 'The correct IUPAC name of the complex $[\\text{Co}(\\text{NH}_3)_5(\\text{CO}_3)]\\text{Cl}$ is:',
+                'option_a' => 'Pentaamminecarbonatocobalt(III) chloride',
+                'option_b' => 'Pentaamminecarbonatocobalt(II) chloride',
+                'option_c' => 'Carbonatopentaamminecobalt(III) chloride',
+                'option_d' => 'Pentaamminechlorocobalt(III) carbonate',
+                'correct_option' => 'A',
+                'explanation' => 'Ligands in alphabetical order: "ammine" before "carbonato". Oxidation state: $x + 5(0) + (-2) + (-1) = 0 \\implies x = +3$. Hence, Pentaamminecarbonatocobalt(III) chloride.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Chemistry',
+                'topic' => 'Organic Chemistry - Phenols',
+                'order_num' => 13,
+                'question_text' => 'Heating phenol with chloroform in the presence of aqueous sodium hydroxide followed by hydrolysis yields:',
+                'option_a' => 'Salicylic acid',
+                'option_b' => 'Salicylaldehyde',
+                'option_c' => 'Benzoic acid',
+                'option_d' => 'o-Cresol',
+                'correct_option' => 'B',
+                'explanation' => 'This is the Reimer-Tiemann reaction. Phenol reacts with $\\text{CHCl}_3$ and $\\text{NaOH}$ through the dichlorocarbene intermediate to produce salicylaldehyde (2-hydroxybenzaldehyde).',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Chemistry',
+                'topic' => 'Solutions & Colligative Properties',
+                'order_num' => 14,
+                'question_text' => 'Which of the following $0.1\\,\\text{M}$ aqueous solutions has the highest boiling point elevation?',
+                'option_a' => '$\\text{Glucose}$',
+                'option_b' => '$\\text{NaCl}$',
+                'option_c' => '$\\text{CaCl}_2$',
+                'option_d' => '$\\text{Al}_2(\\text{SO}_4)_3$',
+                'correct_option' => 'D',
+                'explanation' => 'Elevation in boiling point $\\Delta T_b = i K_b m$. Van\'t Hoff factor $i$: Glucose $= 1$, $\\text{NaCl} = 2$, $\\text{CaCl}_2 = 3$, $\\text{Al}_2(\\text{SO}_4)_3 = 5$. Since $\\text{Al}_2(\\text{SO}_4)_3$ has $i = 5$, it produces the maximum particles and highest $\\Delta T_b$.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'Chemistry',
+                'topic' => 'Chemical Thermodynamics',
+                'order_num' => 15,
+                'question_text' => 'For an endothermic reaction to be spontaneous at temperature $T$, which condition must be fulfilled?',
+                'option_a' => '$\\Delta S > 0$ and $T \\Delta S > \\Delta H$',
+                'option_b' => '$\\Delta S < 0$ and $T \\Delta S < \\Delta H$',
+                'option_c' => '$\\Delta S = 0$',
+                'option_d' => '$\\Delta H < 0$ only',
+                'correct_option' => 'A',
+                'explanation' => 'Gibbs energy change $\\Delta G = \\Delta H - T\\Delta S$. For an endothermic reaction, $\\Delta H > 0$. For spontaneity, $\\Delta G < 0 \\implies T\\Delta S > \\Delta H$, which requires $\\Delta S > 0$ and high temperature.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+
+            // ==================== ENGLISH ====================
+            [
+                'subject' => 'English',
+                'topic' => 'Vocabulary & Synonyms',
+                'order_num' => 16,
+                'question_text' => 'Select the word most similar in meaning to "METICULOUS":',
+                'option_a' => 'Careless',
+                'option_b' => 'Scrupulous',
+                'option_c' => 'Hasty',
+                'option_d' => 'Superficial',
+                'correct_option' => 'B',
+                'explanation' => '"Meticulous" means showing great attention to detail; very careful and precise. "Scrupulous" is an exact synonym.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'English',
+                'topic' => 'Subject-Verb Agreement',
+                'order_num' => 17,
+                'question_text' => 'Choose the grammatically correct sentence:',
+                'option_a' => 'Neither the principal nor the teachers were present.',
+                'option_b' => 'Neither the principal nor the teachers was present.',
+                'option_c' => 'Neither the teachers nor the principal were present.',
+                'option_d' => 'Neither of the teachers are available today.',
+                'correct_option' => 'A',
+                'explanation' => 'When subjects are joined by "neither... nor...", the verb agrees with the closer subject ("teachers" is plural, so "were" is correct).',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'English',
+                'topic' => 'Idioms & Phrases',
+                'order_num' => 18,
+                'question_text' => 'What is the meaning of the idiom "to burn the midnight oil"?',
+                'option_a' => 'To waste resources carelessly',
+                'option_b' => 'To work or study late into the night',
+                'option_c' => 'To create friction in discussions',
+                'option_d' => 'To solve a mechanical issue',
+                'correct_option' => 'B',
+                'explanation' => '"To burn the midnight oil" means to study or work hard late into the night.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'English',
+                'topic' => 'Prepositions',
+                'order_num' => 19,
+                'question_text' => 'Fill in the blank: "Dr. Raman was widely commended _______ his pioneering research in materials science."',
+                'option_a' => 'for',
+                'option_b' => 'at',
+                'option_c' => 'with',
+                'option_d' => 'about',
+                'correct_option' => 'A',
+                'explanation' => 'The verb "commended" takes the preposition "for" to indicate the reason for praise or recognition ("commended for something").',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+            [
+                'subject' => 'English',
+                'topic' => 'Sentence Completion',
+                'order_num' => 20,
+                'question_text' => 'Fill in the blank: "Despite the extreme complexity of the equation, the mathematician proposed an _______ solution that stunned his peers."',
+                'option_a' => 'archaic',
+                'option_b' => 'elegant',
+                'option_c' => 'unwieldy',
+                'option_d' => 'equivocal',
+                'correct_option' => 'B',
+                'explanation' => '"Elegant" in mathematics and science describes a solution that is pleasingly ingenious, simple, and effective.',
+                'positive_marks' => 3.00,
+                'negative_marks' => 1.00,
+            ],
+        ];
+
+        foreach ($questionsPyq as $qData) {
+            $qData['mock_test_id'] = $pyqTest->id;
+            MockTestQuestion::updateOrCreate(
+                [
+                    'mock_test_id' => $pyqTest->id,
+                    'order_num' => $qData['order_num'],
+                ],
+                $qData
+            );
+        }
+
+        $pyqTest->total_questions = count($questionsPyq);
+        $pyqTest->total_marks = (int) array_sum(array_column($questionsPyq, 'positive_marks'));
+        $pyqTest->save();
+        $pyqTest->clearCache();
     }
 }

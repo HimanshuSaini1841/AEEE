@@ -30,20 +30,19 @@ class PyqController extends Controller
             $query->where('subject', $subject);
         }
 
-        $pyqs = $query->orderBy('year', 'desc')
+        $pyqs = $query->with(['mockTest' => function ($q) {
+                $q->where('is_active', true);
+            }])
+            ->orderBy('year', 'desc')
             ->latest('id')
-            ->get([
-                'id',
-                'title',
-                'year',
-                'subject',
-                'file_name',
-                'file_size_formatted',
-                'file_size_bytes',
-                'total_pages',
-                'view_count',
-                'created_at',
-            ]);
+            ->get();
+
+        // Pre-fetch active PYQ mock tests mapped by year as fallback
+        $pyqMockTestsByYear = \App\Models\MockTest::active()
+            ->where('is_pyq', true)
+            ->whereNotNull('pyq_year')
+            ->get(['id', 'pyq_year', 'title'])
+            ->keyBy('pyq_year');
 
         // Group by year for the app UI
         $availableYears = Pyq::active()->distinct()->orderBy('year', 'desc')->pluck('year');
@@ -52,7 +51,9 @@ class PyqController extends Controller
             'success' => true,
             'count' => $pyqs->count(),
             'available_years' => $availableYears,
-            'data' => $pyqs->map(function ($item) {
+            'data' => $pyqs->map(function ($item) use ($pyqMockTestsByYear) {
+                $cbtMockTest = $item->mockTest ?: ($pyqMockTestsByYear->get($item->year));
+
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
@@ -63,6 +64,8 @@ class PyqController extends Controller
                     'file_size_bytes' => $item->file_size_bytes,
                     'total_pages' => $item->total_pages,
                     'download_url' => url("/api/v1/pyqs/{$item->id}/download"),
+                    'has_cbt_test' => !empty($cbtMockTest),
+                    'cbt_mock_test_id' => $cbtMockTest?->id,
                     'created_at' => $item->created_at?->format('d M Y'),
                 ];
             }),

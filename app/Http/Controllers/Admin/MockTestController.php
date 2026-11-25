@@ -54,6 +54,9 @@ class MockTestController extends Controller
             'instructions' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'order_num' => 'nullable|integer',
+            'is_pyq' => 'nullable',
+            'pyq_year' => 'nullable|integer|min:2000|max:2035',
+            'pyq_id' => 'nullable|exists:pyqs,id',
         ]);
 
         // Compute total duration in minutes if hours/mins provided
@@ -68,6 +71,9 @@ class MockTestController extends Controller
 
         $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(5);
         $validated['is_active'] = $request->has('is_active');
+        $validated['is_pyq'] = $request->boolean('is_pyq');
+        $validated['pyq_year'] = $request->input('pyq_year');
+        $validated['pyq_id'] = $request->input('pyq_id');
         $validated['order_num'] = $validated['order_num'] ?? 0;
 
         $mockTest = MockTest::create($validated);
@@ -107,6 +113,9 @@ class MockTestController extends Controller
             'instructions' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'order_num' => 'nullable|integer',
+            'is_pyq' => 'nullable',
+            'pyq_year' => 'nullable|integer|min:2000|max:2035',
+            'pyq_id' => 'nullable|exists:pyqs,id',
         ]);
 
         // Compute total duration in minutes if hours/mins provided
@@ -120,6 +129,9 @@ class MockTestController extends Controller
         unset($validated['duration_hours'], $validated['duration_mins']);
 
         $validated['is_active'] = $request->has('is_active');
+        $validated['is_pyq'] = $request->boolean('is_pyq');
+        $validated['pyq_year'] = $request->input('pyq_year');
+        $validated['pyq_id'] = $request->input('pyq_id');
         $mockTest->update($validated);
 
         return redirect()->route('admin.mock-tests.index')

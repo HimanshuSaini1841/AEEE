@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 
 class MockTest extends Model
@@ -25,6 +26,9 @@ class MockTest extends Model
         'instructions',
         'is_active',
         'order_num',
+        'is_pyq',
+        'pyq_year',
+        'pyq_id',
     ];
 
     protected $casts = [
@@ -37,6 +41,9 @@ class MockTest extends Model
         'negative_marks_default' => 'decimal:2',
         'is_active' => 'boolean',
         'order_num' => 'integer',
+        'is_pyq' => 'boolean',
+        'pyq_year' => 'integer',
+        'pyq_id' => 'integer',
     ];
 
     public function questions(): HasMany
@@ -49,9 +56,23 @@ class MockTest extends Model
         return $this->hasMany(MockTestAttempt::class);
     }
 
+    public function pyq(): BelongsTo
+    {
+        return $this->belongsTo(Pyq::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopePyq($query, ?int $year = null)
+    {
+        $q = $query->where('is_pyq', true);
+        if ($year) {
+            $q->where('pyq_year', $year);
+        }
+        return $q;
     }
 
     public function clearCache(): void

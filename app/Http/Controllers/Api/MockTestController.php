@@ -23,7 +23,7 @@ class MockTestController extends Controller
         $student = $request->user('sanctum') ?? $request->user();
 
         // 1. Get cached mock tests basic info (TTL: 5 minutes)
-        $tests = Cache::remember('mock_tests_active_list', 300, function () {
+        $allTests = Cache::remember('mock_tests_active_list', 300, function () {
             return MockTest::active()
                 ->withCount('questions')
                 ->withSum('questions as calculated_marks', 'positive_marks')
@@ -31,6 +31,22 @@ class MockTestController extends Controller
                 ->latest('id')
                 ->get();
         });
+
+        // Optional filtering by is_pyq / type / year
+        $tests = $allTests;
+        if ($request->has('is_pyq')) {
+            $isPyq = filter_var($request->query('is_pyq'), FILTER_VALIDATE_BOOLEAN);
+            $tests = $tests->where('is_pyq', $isPyq)->values();
+        } elseif ($request->query('type') === 'pyq') {
+            $tests = $tests->where('is_pyq', true)->values();
+        } elseif ($request->query('type') === 'regular') {
+            $tests = $tests->where('is_pyq', false)->values();
+        }
+
+        if ($request->filled('year')) {
+            $year = (int) $request->query('year');
+            $tests = $tests->where('pyq_year', $year)->values();
+        }
 
         // 2. Fetch student's attempt summary in a single fast query
         $studentAttempts = [];
@@ -71,14 +87,25 @@ class MockTestController extends Controller
                 'total_questions' => $actualQuestionCount,
                 'positive_marks' => (float) $test->positive_marks_default,
                 'negative_marks' => (float) $test->negative_marks_default,
+                'is_pyq' => (bool) ($test->is_pyq ?? false),
+                'pyq_year' => $test->pyq_year ? (int) $test->pyq_year : null,
+                'pyq_id' => $test->pyq_id ? (int) $test->pyq_id : null,
                 'has_attempted' => !empty($userAttempt),
                 'user_attempt' => $userAttempt,
             ];
         });
 
+        $availablePyqYears = $allTests->where('is_pyq', true)
+            ->whereNotNull('pyq_year')
+            ->pluck('pyq_year')
+            ->unique()
+            ->sortDesc()
+            ->values();
+
         return response()->json([
             'success' => true,
             'count' => $formatted->count(),
+            'available_pyq_years' => $availablePyqYears,
             'data' => $formatted,
         ]);
     }
